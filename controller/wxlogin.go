@@ -1,12 +1,13 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
-	"Egg/def"
-	"net/http"
-	"fmt"
-	"egg_backend/util"
+	"egg_backend/def"
 	"egg_backend/models"
+	"egg_backend/util"
+	"fmt"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 //跳转微信的url,暂时无用，改为前端调用
@@ -21,7 +22,7 @@ func RedirectUrlHandler(c *gin.Context) {
 func IndexHandler(c *gin.Context) {
 	defer func() {
 		if err := recover(); err != nil {
-			c.Redirect(302, "/wxlogin/url", )
+			c.Redirect(302, "/wxlogin/url")
 			return
 		}
 	}()
@@ -44,6 +45,7 @@ func IndexHandler(c *gin.Context) {
 }
 
 //获取验证码
+// 14c938c682dfadee623ab52dbda8d5e3f086617d
 func GetDentifyingCode() {
 	//暂时先不写
 

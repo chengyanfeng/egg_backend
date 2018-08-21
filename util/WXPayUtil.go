@@ -1,29 +1,27 @@
 package util
 
 import (
-	"fmt"
-	"weizhi/def"
-	"time"
-	"net/http"
-	"io/ioutil"
-	"encoding/xml"
-	"strings"
 	"crypto/md5"
-	"sort"
+	"egg_backend/def"
+	"encoding/xml"
+	"fmt"
+	"io/ioutil"
 	"math/rand"
+	"net/http"
+	"sort"
+	"strings"
+	"time"
 )
-
-
 
 /******************************-----------下面是获取转发的token和ticker与下面的登陆的toenk不一样-----------*************************/
 //获取转发的token
 func GetForwardToken() (token string) {
 	//获取微信转发token
-	response_token, _ := http.Get("https://api.weixin.qq.com/cgi-bin/token?appid=wx53d52d70ccd6439f&secret=dfb513840c45e387cd869af3887e69cb&grant_type=client_credential", )
+	response_token, _ := http.Get("https://api.weixin.qq.com/cgi-bin/token?appid=wx53d52d70ccd6439f&secret=dfb513840c45e387cd869af3887e69cb&grant_type=client_credential")
 	defer response_token.Body.Close()
 	token_body, _ := ioutil.ReadAll(response_token.Body)
 	p := *JsonDecode([]byte(string(token_body)))
-	token = p["access_token"].(string);
+	token = p["access_token"].(string)
 
 	AddCache("forword_token", token)
 	fmt.Println("这是从转发获取拿的token")
@@ -73,6 +71,7 @@ func GetTokenAndOpenid(code string) (access_token, openid string) {
 	}
 
 }
+
 //验证token和openid是否有效
 func checkToken(access_token, openid string) bool {
 	checkToken, _ := http.Get("https://api.weixin.qq.com/sns/auth?access_token=" + access_token + "&openid=" + openid)
@@ -90,6 +89,7 @@ func checkToken(access_token, openid string) bool {
 		return false
 	}
 }
+
 //获取微信登陆用户信息
 func GetUserInfo(code string) (p *map[string]interface{}) {
 	access_token, openid := GetTokenAndOpenid(code)
@@ -106,7 +106,6 @@ func GetUserInfo(code string) (p *map[string]interface{}) {
 
 }
 
-
 /******************************-----------公共方法----------*************************/
 
 //Map转xml
@@ -117,6 +116,7 @@ func MapToxml(userMap *StringMap) string {
 	xml = strings.Replace(xml, "StringMap", "xml", -1)
 	return xml
 }
+
 //获取签名
 func GetSign(p *StringMap) string {
 	sign := ""
@@ -138,7 +138,7 @@ func GetSign(p *StringMap) string {
 }
 
 //生成随机字符串
-func  GetRandomString() string {
+func GetRandomString() string {
 	bytes := []byte(def.WEIXINRANDSTR)
 	result := []byte{}
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
