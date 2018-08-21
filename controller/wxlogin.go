@@ -45,7 +45,7 @@ func IndexHandler(c *gin.Context) {
 }
 
 //获取验证码
-
+// 14c938c682dfadee623ab52dbda8d5e3f086617d
 func GetDentifyingCode() {
 	//暂时先不写
 
