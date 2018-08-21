@@ -8,6 +8,7 @@ import (
 var DB *gorm.DB
 
 type Gorm struct {
+
 }
 
 func (UserInfo) TableName() string {

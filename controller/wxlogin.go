@@ -38,5 +38,18 @@ func IndexHandler(c *gin.Context) {
 	c.JSON(http.StatusOK,  []byte(fmt.Sprintf("%s", token)))
 }
 
+
+//绑定手机号码
+func BandPhoneNumber(c *gin.Context){
+
+}
+
+
 //手机号码登陆
+func PhoneNumberLogin(){
+
+
+
+}
+
 
