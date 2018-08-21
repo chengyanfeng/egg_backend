@@ -68,7 +68,7 @@ func BandPhoneNumber(c *gin.Context) {
 func PhoneNumberLogin(c *gin.Context) {
 	User := models.User{}
 	hose := models.HenHouse{}
-	hose.UserID = User
+	hose.UserID = 890
 	User.ID = 32424
 	User.Mobile = "1232132132132"
 	//去数据库里查询phone

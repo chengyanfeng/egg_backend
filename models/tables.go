@@ -2,20 +2,17 @@ package models
 
 import (
 	"time"
-	"github.com/jinzhu/gorm"
 )
 
 type Model struct {
-	ID         uint `gorm:"primary_key"`
-	CreateTime int  `gorm:"CreateTime"`
-	LastLogIn  int  `gorm:"LastLogIn"`
-	DeletedAt  *time.Time
 }
 
 //用户表
 type User struct {
-	gorm.Model
-	ID          int    `gorm:"ID"`
+	ID          uint   `gorm:"primary_key"`
+	CreateTime  int    `gorm:"CreateTime"`
+	LastLogIn   int    `gorm:"LastLogIn"`
+	DeletedAt   *time.Time
 	LoginTimes  int    `gorm:"LoginTimes"`
 	AddressInfo string `gorm:"column:AddressInfo"`
 	WXOpenID    string `gorm:"column:WXOpenID"`
@@ -29,7 +26,7 @@ type User struct {
 //充值表
 type ChargeOrder struct {
 	ID         int    `gorm:"ID"`
-	UserID     User                   //userID 外键
+	UserID     int    `gorm:"UserID"` //userID 外键
 	Amount     int    `gorm:"Amount"` //充值额（RMB分）
 	CreateTime time.Time
 	PayID      string `gorm:"PayID"`    //支付单号（取决于微信或支付宝）
@@ -39,7 +36,7 @@ type ChargeOrder struct {
 //用户资产表
 type UserProperty struct {
 	ID                int    `gorm:"ID"`                       //id
-	UserID            User                                     //用户ID （关联用户表，1对1）
+	UserID            int    `gorm:"UserID"`                   //用户ID （关联用户表，1对1）
 	Coins             int    `gorm:"column:Coins"`             //金币数量
 	Wallet            string `gorm:"column:Wallet"`            //BSTK Wallet
 	RealEggs          int    `gorm:"column:RealEggs"`          //鸡蛋数量
@@ -65,7 +62,7 @@ type Shop struct {
 //商品订单表
 type ShopOder struct {
 	ID         int `gorm:"id"`
-	UserID     User
+	UserID     int `gorm:"UserID"`
 	CreateTime int `gorm:"CreateTime"` //订单创建时间 UTC
 	ShopID     int `gorm:"ShopID"`     //商品ID
 	Amount     int `gorm:"Amount"`     //购买数量
@@ -76,7 +73,7 @@ type ShopOder struct {
 //系统回收鸡蛋订单表
 type EggWithdrawOrder struct {
 	ID         int `gorm:"id"`
-	UserID     User
+	UserID     int `gorm:"UserID"`
 	CreateTime int `gorm:"CreateTime"` //创建时间戳
 	Amount     int `gorm:"Amount"`     //数量
 	PriceCent  int `gorm:"PriceCent"`  //单价（金币分）
@@ -85,7 +82,7 @@ type EggWithdrawOrder struct {
 //用户提现鸡蛋订单表
 type EggTakenOrder struct {
 	ID          int    `gorm:"ID"`
-	UserID      int                         //用户ID
+	UserID      int    `gorm:"UserID"`      //用户ID
 	CreateTime  int    `gorm:"CreateTime"`  //创建时间戳
 	Amount      int    `gorm:"Amount"`      //提现鸡蛋数量
 	Address     string `gorm:"Address"`     //用户收货信息，从用户表中获得
@@ -95,22 +92,21 @@ type EggTakenOrder struct {
 
 //鸡表
 type Hen struct {
-	ID         int    `gorm:"ID"`         //id
-	RealTag    string `gorm:"RealTag"`    //实体鸡脚环唯一标识
-	Name       string `gorm:"Name"`       //鸡昵称
-	CreateTime int    `gorm:"CreateTime"` //创建时间，鸡生日（UTC， timestamp)
-	State      int    `gorm:"State"`      //当前状态：（1:饥饿，2:吃饱，3:无人看管，4:出游）
-	HenType    int    `gorm:"HenType"`    //鸡类型：（1:免费鸡，2:乖乖鸡，3:金鸡，4:鸡雏，5:公鸡）
-	EggType    int    `gorm:"EggType"`    //产蛋类型：（0:无法产蛋，1:彩蛋，2:鸡蛋），都有概率产出金蛋（3）
-	LifeTime   int    `gorm:"LifeTime"`   //鸡龄: 蛋鸡365天，鸡雏喂养30天转为乖乖鸡，可通过道具加速
-
+	ID          int    `gorm:"ID"`          //id
+	RealTag     string `gorm:"RealTag"`     //实体鸡脚环唯一标识
+	Name        string `gorm:"Name"`        //鸡昵称
+	CreateTime  int    `gorm:"CreateTime"`  //创建时间，鸡生日（UTC， timestamp)
+	State       int    `gorm:"State"`       //当前状态：（1:饥饿，2:吃饱，3:无人看管，4:出游）
+	HenType     int    `gorm:"HenType"`     //鸡类型：（1:免费鸡，2:乖乖鸡，3:金鸡，4:鸡雏，5:公鸡）
+	EggType     int    `gorm:"EggType"`     //产蛋类型：（0:无法产蛋，1:彩蛋，2:鸡蛋），都有概率产出金蛋（3）
+	LifeTime    int    `gorm:"LifeTime"`    //鸡龄: 蛋鸡365天，鸡雏喂养30天转为乖乖鸡，可通过道具加速
 	Lifes       int    `gorm:"Lifes"`       //生命数，3条
 	LifeValue   int    `gorm:"LifeValue"`   //生命值，一天不喂养（喂养以天为单位，0-24点任意时刻），进入生命值倒计时（72小时），State转为1，倒计时内喂养，解除倒计时，倒计时到减除1条Life直至完全死亡
 	EggGenRate  int    `gorm:"EggGenRate"`  //产蛋率（每日产蛋数量，default: 0.667，即3天2枚，可转化为36小时1枚)，针对彩蛋，鸡蛋，金蛋
 	GoldEggRate int    `gorm:"GoldEggRate"` //产蛋为金蛋概率，每产出一枚蛋时，依据此概率进行金蛋转换(千分之）
 	Skins       string `gorm:"Skins"`       //当前使用的道具列表
-	HenHouseID  int                         //所属鸡舍 （关联鸡舍表，多对1）
-	UserID      User                        //所属用户 （关联用户表，多对1）
+	HenHouseID  int    `gorm:"HenHouseID"`  //所属鸡舍 （关联鸡舍表，多对1）
+	UserID      int    `gorm:"UserID"`      //所属用户 （关联用户表，多对1）
 }
 
 //鸡舍表
@@ -119,14 +115,14 @@ type HenHouse struct {
 	Level      int    `gorm:"Level"`      //等级
 	Tools      string `gorm:"Tools"`      //道具列表，用户购买的鸡舍道具列表
 	CleanState int    `gorm:"CleanState"` //	清洁程度
-	UserID     User                       //所属用户 (关联用户表，1对1）
+	UserID     int    `gorm:"UserID"`     //所属用户 (关联用户表，1对1）
 }
 
 //市场表
 type Market struct {
 	ID            int `gorm:"ID"`
-	Seller        User                       //卖家UserID
-	Buyer         User                       //买家UserID 未成交为null
+	Seller        int `gorm:"Seller"`        //卖家UserID
+	Buyer         int `gorm:"Buyer"`         //买家UserID 未成交为null
 	CreateTime    int `gorm:"CreateTime"`    //创建时间戳
 	UpdateTime    int `gorm:"UpdateTime"`    //更新时间戳（例如卖家更新价格，更新金蛋数量）
 	DealTime      int `gorm:"DealTime"`      //成交时间戳
