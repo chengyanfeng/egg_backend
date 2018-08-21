@@ -1,12 +1,13 @@
 package router
 
 import (
-	"github.com/gin-gonic/gin"
 	"egg_backend/controller"
-)
-var Defaultrouter = gin.Default()    //获得路由实例
-func init() {
 
+	"github.com/gin-gonic/gin"
+)
+
+var Defaultrouter = gin.Default() //获得路由实例
+func init() {
 
 	//注册接口demo
 	//添加中间件
@@ -15,7 +16,6 @@ func init() {
 	Defaultrouter.POST("/simple/server/post", controller.PostHandler)
 	Defaultrouter.PUT("/simple/server/put", controller.PutHandler)
 	Defaultrouter.DELETE("/simple/server/delete", controller.DeleteHandler)
-
 
 	/***********************************----------------路由拦截器----------------******************************/
 	//添加中间件
