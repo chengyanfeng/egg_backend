@@ -9,7 +9,7 @@ import (
 	"egg_backend/models"
 )
 
-//跳转微信的url
+//跳转微信的url,暂时无用，改为前端调用
 func RedirectUrlHandler(c *gin.Context) {
 	redirecturl := "https%3a%2f%2fservice.genyuanlian.com%2fseven_night%2findex"
 	url := "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + def.WEIXINAPPID + "&redirect_uri=" + redirecturl +
