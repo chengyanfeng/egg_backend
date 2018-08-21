@@ -9,7 +9,7 @@ import (
 
 //登陆拦截器
 func LoginFilter(c *gin.Context) {
-	if c.Request.URL.Path == "/wxlogin/url" || c.Request.URL.Path == "/wxlogin/index" {
+	if c.Request.URL.Path == "/wxlogin/url" || c.Request.URL.Path == "/wxlogin/index" ||c.Request.URL.Path=="/PhoneNumberLogin"{
 		fmt.Print(c.Request.URL.Path)
 		c.Next()
 	} else {

@@ -2,6 +2,7 @@ package models
 
 import (
 	"github.com/jinzhu/gorm"
+	_ "github.com/go-sql-driver/mysql"
 	"fmt"
 )
 
@@ -11,9 +12,9 @@ type Gorm struct {
 
 }
 
-func (UserInfo) TableName() string {
+func (User) TableName() string {
 
-	return "users"
+	return "user"
 }
 
 //数据库初始化
@@ -34,10 +35,10 @@ func init() {
 	}
 	if DB.HasTable("users") {
 		//自动添加模式
-		DB.AutoMigrate(&UserInfo{})
+		DB.AutoMigrate(&User{})
 		fmt.Println("数据表已经存在")
 	} else {
-		DB.CreateTable(&UserInfo{})
+		DB.CreateTable(&User{})
 	}
 
 }
