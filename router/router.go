@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"Egg/controller"
+	"egg_backend/controller"
 )
 var Defaultrouter = gin.Default()    //获得路由实例
 func init() {
@@ -22,12 +22,12 @@ func init() {
 	Defaultrouter.Use(controller.LoginFilter)
 	/***********************************---------------以下为正式路由-----------------******************************/
 	//支付宝支付接口
-	Defaultrouter.GET("/zhifubao/pay", controller.Zhifubaopay)
+	Defaultrouter.GET("/zhifubao/pay", controller.ZhiFuBaoPay)
 	//支付宝回掉函数
 	Defaultrouter.POST("/zhifubao/return", controller.Return)
 
 	//微信登陆接口
-	Defaultrouter.GET("/wxlogin/url", controller.RedirecturlHandler)
+	Defaultrouter.GET("/wxlogin/url", controller.RedirectUrlHandler)
 	//微信返回跳转接口
 	Defaultrouter.GET("/wxlogin/index", controller.IndexHandler)
 

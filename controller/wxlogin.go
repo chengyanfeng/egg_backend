@@ -9,7 +9,7 @@ import (
 )
 
 //跳转微信的url
-func RedirecturlHandler(c *gin.Context) {
+func RedirectUrlHandler(c *gin.Context) {
 	redirecturl := "https%3a%2f%2fservice.genyuanlian.com%2fseven_night%2findex"
 	url := "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + def.WEIXINAPPID + "&redirect_uri=" + redirecturl +
 		"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect"

@@ -12,7 +12,7 @@ import (
 var client = alipay.New(def.ZHIFUBAOAPPID, "2088802940812132", def.ZHIFUBAO_KEY, def.ZHIFUBAOprivateKey, false)
 
 //支付信息
-func  Zhifubaopay(c *gin.Context) {
+func  ZhiFuBaoPay(c *gin.Context) {
 	var p = alipay.AliPayTradeWapPay{}
 	//回调函数
 	p.NotifyURL = "http://192.144.176.213:8070/Return"
