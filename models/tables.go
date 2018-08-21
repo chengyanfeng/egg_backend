@@ -9,9 +9,9 @@ type Model struct {
 
 //用户表
 type User struct {
-	ID          uint   `gorm:"primary_key"`
-	CreateTime  int    `gorm:"CreateTime"`
-	LastLogIn   int    `gorm:"LastLogIn"`
+	ID          uint `gorm:"primary_key"`
+	CreateTime  int  `gorm:"CreateTime"`
+	LastLogIn   int  `gorm:"LastLogIn"`
 	DeletedAt   *time.Time
 	LoginTimes  int    `gorm:"LoginTimes"`
 	AddressInfo string `gorm:"column:AddressInfo"`
@@ -25,9 +25,9 @@ type User struct {
 
 //充值表
 type ChargeOrder struct {
-	ID         int    `gorm:"ID"`
-	UserID     int    `gorm:"UserID"` //userID 外键
-	Amount     int    `gorm:"Amount"` //充值额（RMB分）
+	ID         int `gorm:"ID"`
+	UserID     int `gorm:"UserID"` //userID 外键
+	Amount     int `gorm:"Amount"` //充值额（RMB分）
 	CreateTime time.Time
 	PayID      string `gorm:"PayID"`    //支付单号（取决于微信或支付宝）
 	PayState   int    `gorm:"PayState"` //支付状态（0：未支付，1：已支付，2:支付失败）
@@ -43,11 +43,11 @@ type UserProperty struct {
 	FreeEggs          int    `gorm:"column:FreeEggs"`          //彩蛋数量
 	GoldEggsFree      int    `gorm:"column:GoldEggsFree"`      //可操作金蛋数量
 	GoldEggMarketLock int    `gorm:"column:GoldEggMarketLock"` //挂在市场上的数量
-	HenHouseID        int                                      //鸡舍ID（关联鸡舍表，1对1）
-	Hens              int    `gorm:"column:Hens"`              //所拥有鸡ID列表,此项属性低频变化，用户购买，或者孵化，或者鸡死亡触发变化，平常避免联合查询
-	NormalFoods       int    `gorm:"column:NormalFoods"`       //普通饲料数量
-	FastFoods         int    `gorm:"column:FastFoods"`         //快速成长饲料数量
-	HasDag            int    `gorm:"column:HasDag"`            //是否有狗 (0, 1)
+	HenHouseID        int    //鸡舍ID（关联鸡舍表，1对1）
+	Hens              int    `gorm:"column:Hens"`        //所拥有鸡ID列表,此项属性低频变化，用户购买，或者孵化，或者鸡死亡触发变化，平常避免联合查询
+	NormalFoods       int    `gorm:"column:NormalFoods"` //普通饲料数量
+	FastFoods         int    `gorm:"column:FastFoods"`   //快速成长饲料数量
+	HasDag            int    `gorm:"column:HasDag"`      //是否有狗 (0, 1)
 }
 
 //商品表
@@ -121,14 +121,14 @@ type HenHouse struct {
 //市场表
 type Market struct {
 	ID            int `gorm:"ID"`
-	Seller        int `gorm:"Seller"`        //卖家UserID
-	Buyer         int `gorm:"Buyer"`         //买家UserID 未成交为null
-	CreateTime    int `gorm:"CreateTime"`    //创建时间戳
-	UpdateTime    int `gorm:"UpdateTime"`    //更新时间戳（例如卖家更新价格，更新金蛋数量）
-	DealTime      int `gorm:"DealTime"`      //成交时间戳
-	State         int `gorm:"State"`         //0:待售，1:成交
-	Type          int `gorm:"Type"`          //交易物品类型（1:乖乖鸡，2:金鸡，3:金蛋）
-	ItemID        Hen                        //对应的实际物品ID，目前主要是Hen ID, 如果Type是金蛋，此处对应的是UserPropertyID, UserProperty--GoldEggMarketLock 确定了售卖数量
+	Seller        int `gorm:"Seller"`     //卖家UserID
+	Buyer         int `gorm:"Buyer"`      //买家UserID 未成交为null
+	CreateTime    int `gorm:"CreateTime"` //创建时间戳
+	UpdateTime    int `gorm:"UpdateTime"` //更新时间戳（例如卖家更新价格，更新金蛋数量）
+	DealTime      int `gorm:"DealTime"`   //成交时间戳
+	State         int `gorm:"State"`      //0:待售，1:成交
+	Type          int `gorm:"Type"`       //交易物品类型（1:乖乖鸡，2:金鸡，3:金蛋）
+	ItemID        Hen //对应的实际物品ID，目前主要是Hen ID, 如果Type是金蛋，此处对应的是UserPropertyID, UserProperty--GoldEggMarketLock 确定了售卖数量
 	ItemPriceCent int `gorm:"ItemPriceCent"` //单价（金币分）
 }
 

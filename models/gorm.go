@@ -1,15 +1,14 @@
 package models
 
 import (
-	"github.com/jinzhu/gorm"
-	_ "github.com/go-sql-driver/mysql"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
 )
 
 var DB *gorm.DB
 
 type Gorm struct {
-
 }
 
 func (User) TableName() string {
