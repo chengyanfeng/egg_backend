@@ -56,11 +56,11 @@ type Shop struct {
 	Name      string `gorm:"column:Name"`      //商品名称
 	Type      int    `gorm:"column:Type"`      //商品类型（1:乖乖鸡，2:普通饲料，3:能量饲料，4:快速饲料..., 类型通过和客户端共享JSON配置文件）
 	PriceCent int    `gorm:"column:PriceCent"` //金币价格（以分为单位，1/100）
-	Amount    int    `gorm:"column:Amount"`    //         库存
+	Amount    int    `gorm:"column:Amount"`    //库存
 }
 
 //商品订单表
-type ShopOder struct {
+type ShopOrder struct {
 	ID         int `gorm:"id"`
 	UserID     int `gorm:"UserID"`
 	CreateTime int `gorm:"CreateTime"` //订单创建时间 UTC
@@ -120,7 +120,7 @@ type HenHouse struct {
 
 //市场表
 type Market struct {
-	ID            int `gorm:"ID"`
+	Id            int `gorm:"ID"`
 	Seller        int `gorm:"Seller"`     //卖家UserID
 	Buyer         int `gorm:"Buyer"`      //买家UserID 未成交为null
 	CreateTime    int `gorm:"CreateTime"` //创建时间戳
@@ -128,7 +128,7 @@ type Market struct {
 	DealTime      int `gorm:"DealTime"`   //成交时间戳
 	State         int `gorm:"State"`      //0:待售，1:成交
 	Type          int `gorm:"Type"`       //交易物品类型（1:乖乖鸡，2:金鸡，3:金蛋）
-	ItemID        Hen //对应的实际物品ID，目前主要是Hen ID, 如果Type是金蛋，此处对应的是UserPropertyID, UserProperty--GoldEggMarketLock 确定了售卖数量
+	ItemID        int //对应的实际物品ID，目前主要是Hen ID, 如果Type是金蛋，此处对应的是UserPropertyID, UserProperty--GoldEggMarketLock 确定了售卖数量
 	ItemPriceCent int `gorm:"ItemPriceCent"` //单价（金币分）
 }
 
@@ -145,7 +145,7 @@ type Config struct {
 	GoldEggTransferChickenRate   int `gorm:"GoldEggTransferChickenRate"`   //金蛋孵化小鸡概率（千分之） 300-500
 	GoldEggTransferSmallBstkRate int `gorm:"GoldEggTransferSmallBstkRate"` //金蛋孵化小额BSTK概率（千分之）500-700
 	GoldEggTransferHugeBstkRate  int `gorm:"GoldEggTransferHugeBstkRate"`  //金蛋孵化大额BSTK概率（千分之）待定 （3项概率和为1000）
-	EnergeFoodAffection          int `gorm:"EnergeFoodAffection"`          //	能量饲料产蛋影响倍数（只影响第二天）x2
+	EnergeFoodAffection          int `gorm:"EnergeFoodAffection"`          //能量饲料产蛋影响倍数（只影响第二天）x2
 	HenVisitHours                int `gorm:"HenVisitHours"`                //鸡外出串门小时数 1-24小时 随机
 }
 
