@@ -1,18 +1,18 @@
 package util
 
 import (
-	"fmt"
 	"crypto/md5"
-	"hash"
 	"crypto/sha1"
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/json"
+	"fmt"
+	"github.com/muesli/cache2go"
 	"gopkg.in/mgo.v2/bson"
+	"hash"
+	"os"
 	"sort"
 	"strconv"
-	"encoding/json"
-	"os"
-	"github.com/muesli/cache2go"
 	"time"
 )
 
@@ -135,7 +135,6 @@ func WriteFile(url string, body []byte) bool {
 	}
 }
 
-
 /****************************------------------以下方法为缓存-------------------------************************************/
 type Cacha struct {
 	openId   string
@@ -153,20 +152,21 @@ func AddCache(token, openId string) bool {
 	// 验证是否存在
 	res, err := cache.Value(token)
 	if err == nil {
-		fmt.Print(res.Data().(Cacha).openId)
+		fmt.Print(res.Data().(*Cacha).openId)
 		return true
 	} else {
 		return false
 	}
 
 }
+
 //获取缓存
 func GetCache(token string) string {
 	//创建缓存表,有则获取Cache表，无则创建
 	cache := cache2go.Cache("Cache")
 	res, err := cache.Value(token)
 	if err == nil {
-		return res.Data().(Cacha).openId
+		return res.Data().(*Cacha).openId
 	} else {
 		return ""
 	}

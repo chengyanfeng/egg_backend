@@ -34,4 +34,7 @@ func init() {
 	//手机号登陆
 	Defaultrouter.POST("/PhoneNumberLogin", controller.PhoneNumberLogin)
 
+	//发送手机号码
+	Defaultrouter.GET("/SetNumberVcod", controller.SetNumberVcod)
+
 }

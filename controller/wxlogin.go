@@ -235,3 +235,26 @@ func SetPassWord(c *gin.Context) {
 		}
 	}
 }
+
+//发送手机验证码
+
+func SetNumberVcod(c *gin.Context) {
+	returnp := util.P{}
+	phone, exist := c.GetQuery("phoneNumber")
+	if !exist {
+		returnp["code"] = def.CODEPhoneIsNull
+		c.JSON(http.StatusOK, returnp)
+		return
+	}
+	ifSendOk := util.SendMessage(phone)
+	if ifSendOk {
+		returnp["code"] = def.CODE
+		c.JSON(http.StatusOK, returnp)
+		return
+	} else {
+		returnp["code"] = def.CODEGETERR
+		c.JSON(http.StatusOK, returnp)
+		return
+	}
+
+}

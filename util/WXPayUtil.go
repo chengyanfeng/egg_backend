@@ -2,6 +2,7 @@ package util
 
 import (
 	"crypto/md5"
+	"crypto/sha256"
 	"egg_backend/def"
 	"encoding/xml"
 	"fmt"
@@ -104,6 +105,75 @@ func GetUserInfo(code string) (p *map[string]interface{}) {
 
 }
 
+//微信服务器获取上传的文件和图片
+func GetImageFromCould(mediaId, url string) (imagePath string) {
+	token := ToString(GetCache("forword_token"))
+	retrnbody, _ := http.Get("https://api.weixin.qq.com/cgi-bin/media/get?access_token=" + token + "&media_id=" + mediaId)
+	defer retrnbody.Body.Close()
+
+	imageName := retrnbody.Header.Get("Content-Disposition")
+	if imageName == "" {
+		return "fail"
+	}
+	imageName = strings.Split(imageName, "=")[1]
+	imageName = strings.Replace(imageName, "\"", "", -1)
+	token_body, _ := ioutil.ReadAll(retrnbody.Body)
+	URL := url + imageName
+	flag := WriteFile(URL, token_body)
+	if flag {
+		return URL
+	} else {
+		return "保存图片失败"
+	}
+}
+
+//短信验证码
+func SendMessage(mobile string) bool {
+	randVcode := GetRandomString()
+	tim := time.Now().Unix()
+	sendString := "appkey=" + def.MESSAPPKEY + "&random=7226249334&time=" + ToString(tim) + "&mobile=" + mobile
+	sign := fmt.Sprintf("%x", sha256.Sum256([]byte(sendString)))
+	senda := `{"params":["` + randVcode + `"],"sig":"` + sign + `","tel":{"mobile":"` + mobile + `", "nationcode":"86" } ,"time":` + ToString(tim) + `,"tpl_id":122011}`
+	response, _ := http.Post("https://yun.tim.qq.com/v5/tlssmssvr/sendsms?sdkappid=1400091286&random=7226249334", "application/json;charset=utf-8", strings.NewReader(senda))
+	defer response.Body.Close()
+	token_body, _ := ioutil.ReadAll(response.Body)
+	p := *JsonDecode([]byte(string(token_body)))
+	result := p["result"].(float64)
+	if result == 0 {
+		//添加到缓存里
+		AddCache(mobile, randVcode)
+		ac := GetCache(mobile)
+		fmt.Print(ac)
+		return true
+	} else {
+		return false
+	}
+
+}
+
+//微信支付
+func GetWXpay_id(openid string) (xml string) {
+	userMap := &StringMap{}
+	(*userMap)["appid"] = def.WEIXINAPPID
+	(*userMap)["mch_id"] = def.WEIXINMCH_ID
+	(*userMap)["nonce_str"] = GetRandomString()
+	(*userMap)["body"] = "1212121"
+	(*userMap)["out_trade_no"] = "123456"
+	(*userMap)["total_fee"] = "1"
+	(*userMap)["spbill_create_ip"] = "123.12.12.123"
+	(*userMap)["trade_type"] = "JSAPI"
+	(*userMap)["notify_url"] = "http://www.weixin.qq.com/wxpay/pay.php"
+	(*userMap)["sign_type"] = "MD5"
+	(*userMap)["openid"] = openid
+
+	xml = MapToxml(userMap)
+	response, _ := http.Post("https://api.mch.weixin.qq.com/sandbox/pay/unifiedorder", "application/xml;charset=utf-8", strings.NewReader(xml))
+	defer response.Body.Close()
+	token_body, _ := ioutil.ReadAll(response.Body)
+	xml = string(token_body)
+	return xml
+}
+
 /******************************-----------公共方法----------*************************/
 
 //Map转xml
@@ -140,7 +210,7 @@ func GetRandomString() string {
 	bytes := []byte(def.WEIXINRANDSTR)
 	result := []byte{}
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	for i := 0; i < 30; i++ {
+	for i := 0; i < 4; i++ {
 		result = append(result, bytes[r.Intn(len(bytes))])
 	}
 	return string(result)

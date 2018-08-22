@@ -4,7 +4,7 @@ const (
 	WEIXINAPPID   = "wx53d52d70ccd6439f"
 	WEIXINMCH_ID  = "1484906012"
 	WEIXINKEY     = "bc0d0bf542b7fa4e44d94501426d69af"
-	WEIXINRANDSTR = "1234567890qwertyuioplkjhgfdsazxcvbnm"
+	WEIXINRANDSTR = "1234567890"
 
 	ZHIFUBAOAPPID      = "2016091700531051"
 	ZHIFUBAO_KEY       = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoAkiY/SF2FctbDybq+SA8GDMueeaRUCPi1Oq0AUFb+IKJYB7Z4xvgWlSG0qTC2MQXc4PsG4W0XXmnZORE6Tg2Z89JLQF/mlgAJiJNCNTBY+4/D8xVlKkCx8m5CqQaxEIgCm0TxD4/k72tWm1U4/sd0yqXy4H6QNaBbO6sF8FF8nTpTlqdFsFefnjrI8VRCR5IWWSVl6WRW+LtGupE2UUnlaIfRokBAeVu6bZocdoImqXLJd8UiLHNNA/RiKX7DxMKHI3lMWBhjLqh314rtW5bhK6PPVjIneK3fKlRaX+twbjFam+nouFUSiZCcm8f4JYXnSAk0qUgoZyz1ZhZVwmMQIDAQAB"
@@ -16,6 +16,10 @@ const (
 	"DM7Rsr9NroLO9yJz4e2SrVWJonKRqUjNIIwoWIsMRDCcDi6m0c2JL8nR1gO7fWzojoq5/guKNokZrezYgdk" +
 	"Q4cfqU+zROwrvGj3Q+Qcza2ko9HsFO8vD/3NL1aZbb5578qd+1o4zaWdsuggWCDFMG76TMDGH2G77SoYLwIDAQAB"*/
 
+	//短信的各种必须参数
+	MESSAGEAPPID = "1400091286"
+	MESSAPPKEY   = "d11b3ec80e47164ef71c1385258bb4cc"
+	MESSMOBAN    = "122011"
 	//code 的返回码说明
 	CODE               = 0     //没有任何异常。返回成功
 	CODENoPhone        = 40001 //用户没有绑定手机号码,或者手机号码为空
@@ -28,5 +32,6 @@ const (
 	CODEDentifyCodeERR = 40006 //验证码错误
 	CODEDENtifyCodeExp = 40007 //验证码过期
 	CODETOKENErr       = 40008 //token 错误
+	CODEGETERR         = 40009 //腾讯云验证码获取失败
 
 )
