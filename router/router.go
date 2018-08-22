@@ -29,8 +29,9 @@ func init() {
 	//微信登陆接口
 	Defaultrouter.GET("/wxlogin/url", controller.RedirectUrlHandler)
 	//微信返回跳转接口
+	Defaultrouter.POST("/wxlogin/index", controller.IndexHandler)
 	Defaultrouter.GET("/wxlogin/index", controller.IndexHandler)
-	Defaultrouter.GET("/PhoneNumberLogin", controller.PhoneNumberLogin)
-
+	//手机号登陆
+	Defaultrouter.POST("/PhoneNumberLogin", controller.PhoneNumberLogin)
 
 }

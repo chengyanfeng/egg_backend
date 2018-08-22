@@ -30,8 +30,8 @@ func IndexHandler(c *gin.Context) {
 	}()
 	code, exist := c.GetQuery("code")
 	if !exist {
-		code = "the code is not exist!"
-		c.JSON(http.StatusOK, []byte(fmt.Sprintf("%s", code)))
+		returnp["code"] = def.CODEWXNOCode
+		c.JSON(http.StatusOK, returnp)
 		return
 	}
 	userinfo := util.GetUserInfo(code)
@@ -46,11 +46,11 @@ func IndexHandler(c *gin.Context) {
 		models.DB.Where(user).First(&user)
 		if len(user.Mobile) > 0 {
 			returnp["code"] = def.CODENoPhone
-			c.JSON(http.StatusOK, []byte(fmt.Sprintf("%s", returnp)))
+			c.JSON(http.StatusOK, returnp)
 			return
 		} else {
 			returnp["code"] = def.CODE
-			c.JSON(http.StatusOK, []byte(fmt.Sprintf("%s", returnp)))
+			c.JSON(http.StatusOK, returnp)
 			return
 		}
 	}
@@ -63,14 +63,14 @@ func IndexHandler(c *gin.Context) {
 		fmt.Print("保存成功")
 	} else {
 		returnp["code"] = def.CODEErrDB
-		c.JSON(http.StatusOK, []byte(fmt.Sprintf("%s", returnp)))
+		c.JSON(http.StatusOK, returnp)
 	}
 
 	//返回用户token,从缓存里获取。
 	token := util.GetCache("token")
 	returnp["token"] = token
 	returnp["code"] = def.CODENoPhone
-	c.JSON(http.StatusOK, []byte(fmt.Sprintf("%s", returnp)))
+	c.JSON(http.StatusOK, returnp)
 	return
 
 }
@@ -91,7 +91,7 @@ func BandPhoneNumber(c *gin.Context) {
 	openId := util.GetCache(token)
 	if !exist {
 		returnp["code"] = def.CODENoPhone
-		c.JSON(http.StatusOK, []byte(fmt.Sprintf(" %s", returnp)))
+		c.JSON(http.StatusOK, returnp)
 	}
 	//判断号码是否已经存在
 	user.Mobile = PhoneNumber
@@ -110,7 +110,7 @@ func BandPhoneNumber(c *gin.Context) {
 		models.DB.Save(&user)
 		returnp["token"] = token
 		returnp["code"] = def.CODEPhoneBandWX
-		c.JSON(http.StatusOK, []byte(fmt.Sprintf("%s", returnp)))
+		c.JSON(http.StatusOK, returnp)
 		return
 	}
 	//如果号码不存在，微信一定存在
@@ -122,7 +122,7 @@ func BandPhoneNumber(c *gin.Context) {
 		//更新手机号和秘密
 		models.DB.Save(&user)
 		returnp["code"] = def.CODEBandPhone
-		c.JSON(http.StatusOK, []byte(fmt.Sprintf(" %s", returnp)))
+		c.JSON(http.StatusOK, returnp)
 	}
 
 }
@@ -136,7 +136,7 @@ func PhoneNumberLogin(c *gin.Context) {
 	Password, _ := c.GetQuery("PassWord")
 	if !exist {
 		returnp["code"] = def.CODEPhoneIsNull
-		c.JSON(http.StatusOK, fmt.Sprintf(" %s", returnp))
+		c.JSON(http.StatusOK, returnp)
 		return
 	}
 	User.Mobile = phone
@@ -146,29 +146,29 @@ func PhoneNumberLogin(c *gin.Context) {
 			models.DB.First(&User)
 			if util.Hash(Password) != User.PwdHash {
 				returnp["code"] = def.CODEPassWordErr
-				c.JSON(http.StatusOK, fmt.Sprintf(" %s", returnp))
+				c.JSON(http.StatusOK, returnp)
 			} else {
 				//返回自定义token
 				util.AddCache("token", util.Hash(phone))
 				returnp["code"] = def.CODE
 				returnp["token"] = util.Hash(phone)
-				c.JSON(http.StatusOK, fmt.Sprintf(" %s", returnp))
+				c.JSON(http.StatusOK, returnp)
 			}
 		} else {
 			returnp["code"] = def.CODEPhoneIsNull
-			c.JSON(http.StatusOK, fmt.Sprintf(" %s", returnp))
+			c.JSON(http.StatusOK, returnp)
 		}
 
 	} else {
 		CacheDentifyCode := util.GetCache(phone)
 		if len(CacheDentifyCode) == 0 {
 			returnp["code"] = def.CODEDENtifyCodeExp
-			c.JSON(http.StatusOK, []byte(fmt.Sprintf(" %s", returnp)))
+			c.JSON(http.StatusOK, returnp)
 			return
 		}
 		if CacheDentifyCode != dentifyingCode {
 			returnp["code"] = def.CODEDentifyCodeERR
-			c.JSON(http.StatusOK, []byte(fmt.Sprintf(" %s", returnp)))
+			c.JSON(http.StatusOK, returnp)
 			return
 		} else {
 			//如果已经注册，获取userID
@@ -180,7 +180,7 @@ func PhoneNumberLogin(c *gin.Context) {
 				util.AddCache(token, util.ToString(User.ID))
 				returnp["code"] = def.CODE
 				returnp["token"] = token
-				c.JSON(http.StatusOK, []byte(fmt.Sprintf(" %s", returnp)))
+				c.JSON(http.StatusOK, returnp)
 				return
 
 			} else {
@@ -194,7 +194,7 @@ func PhoneNumberLogin(c *gin.Context) {
 				util.AddCache(token, util.ToString(User.ID))
 				returnp["code"] = def.CODE
 				returnp["token"] = token
-				c.JSON(http.StatusOK, []byte(fmt.Sprintf(" %s", returnp)))
+				c.JSON(http.StatusOK, returnp)
 				return
 			}
 		}
@@ -222,7 +222,7 @@ func SetPassWord(c *gin.Context) {
 			models.DB.Save(&User)
 			returnp["code"] = def.CODE
 			returnp["token"] = token
-			c.JSON(http.StatusOK, fmt.Sprintf(" %s", returnp))
+			c.JSON(http.StatusOK, returnp)
 		}
 	} else {
 		User.ID = util.ToInt(userIdOrOpenId)
@@ -231,7 +231,7 @@ func SetPassWord(c *gin.Context) {
 			models.DB.Save(&User)
 			returnp["code"] = def.CODE
 			returnp["token"] = token
-			c.JSON(http.StatusOK, fmt.Sprintf(" %s", returnp))
+			c.JSON(http.StatusOK, returnp)
 		}
 	}
 }
