@@ -43,7 +43,7 @@ func ReGet(key string) interface{} {
 }
 
 //检查key 是否存在
-func ReIsEx(key string) bool{
+func ReIsEx(key string) bool {
 	c, err := redis.Dial("tcp", "127.0.0.1:6379")
 	if err != nil {
 		fmt.Println("Connect to redis error", err)
@@ -61,9 +61,8 @@ func ReIsEx(key string) bool{
 	}
 }
 
-
 //删除
-func ReDel(key string)bool{
+func ReDel(key string) bool {
 	c, err := redis.Dial("tcp", "127.0.0.1:6379")
 	if err != nil {
 		fmt.Println("Connect to redis error", err)
@@ -79,7 +78,7 @@ func ReDel(key string)bool{
 }
 
 //设置某个key的过期时间
-func ReExpr(key string, time int){
+func ReExpr(key string, time int) {
 	c, err := redis.Dial("tcp", "127.0.0.1:6379")
 	if err != nil {
 		fmt.Println("Connect to redis error", err)
@@ -94,5 +93,3 @@ func ReExpr(key string, time int){
 	}
 
 }
-
-

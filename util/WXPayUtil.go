@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-/******************************-----------下面是获取转发的token和ticker与下面的登陆的toenk不一样-----------*************************/
+/******************************-----------下面是获取转发的token和ticker与下面的登陆的tokenk不一样-----------*************************/
 //获取转发的token
 func GetForwardToken() (token string) {
 	//获取微信转发token
@@ -22,8 +22,6 @@ func GetForwardToken() (token string) {
 	token_body, _ := ioutil.ReadAll(response_token.Body)
 	p := *JsonDecode([]byte(string(token_body)))
 	token = p["access_token"].(string)
-
-	AddCache("forword_token", token)
 	fmt.Println("这是从转发获取拿的token")
 	return
 }

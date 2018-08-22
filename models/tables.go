@@ -9,9 +9,9 @@ type Model struct {
 
 //用户表
 type User struct {
-	ID          uint `gorm:"primary_key"`
-	CreateTime  int  `gorm:"CreateTime"`
-	LastLogIn   int  `gorm:"LastLogIn"`
+	ID          int `gorm:"primary_key"`
+	CreateTime  int `gorm:"CreateTime"`
+	LastLogIn   int `gorm:"LastLogIn"`
 	DeletedAt   *time.Time
 	LoginTimes  int    `gorm:"LoginTimes"`
 	AddressInfo string `gorm:"column:AddressInfo"`
@@ -20,7 +20,7 @@ type User struct {
 	WXHeadImg   string `gorm:"column:WXHeadImg"`
 	Mobile      string `gorm:"column:Mobile"`
 	PwdHash     string `gorm:"column:PwdHash"`
-	PropertyID  UserProperty
+	PropertyID  int    `gorm:"column:PropertyID"`
 }
 
 //充值表
