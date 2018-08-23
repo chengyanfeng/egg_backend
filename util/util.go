@@ -138,7 +138,7 @@ func WriteFile(url string, body []byte) bool {
 
 /****************************------------------以下方法为缓存-------------------------************************************/
 type Cacha struct {
-	openId   string
+	value    string
 	moreData []byte
 }
 
@@ -153,7 +153,7 @@ func AddCache(token, openId string) bool {
 	// 验证是否存在
 	res, err := cache.Value(token)
 	if err == nil {
-		fmt.Print(res.Data().(*Cacha).openId)
+		fmt.Print(res.Data().(*Cacha).value)
 		return true
 	} else {
 		return false
@@ -167,7 +167,7 @@ func GetCache(token string) string {
 	cache := cache2go.Cache("Cache")
 	res, err := cache.Value(token)
 	if err == nil {
-		return res.Data().(*Cacha).openId
+		return res.Data().(*Cacha).value
 	} else {
 		return ""
 	}
