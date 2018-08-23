@@ -26,7 +26,7 @@ const (
 	CODEErrDB          = 40002 //数据库异常
 	CODEPhoneBandWX    = 10001 //微信和之前的手机账号绑定
 	CODEWXNOCode       = 10002 //微信登陆没有code
-	CODEBandPhone      = 40000 //微信和手机号绑定
+	CODEBandPhone      = 20000 //微信和手机号绑定成功
 	CODEPhoneIsNull    = 40004 //手机号为空
 	CODEPassWordErr    = 40005 //密码错误
 	CODEDentifyCodeERR = 40006 //验证码错误

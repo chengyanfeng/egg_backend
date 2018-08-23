@@ -37,4 +37,7 @@ func init() {
 	//发送手机号码
 	Defaultrouter.GET("/SetNumberVcod", controller.SetNumberVcod)
 
+	//测试
+	Defaultrouter.GET("/Test", controller.Test)
+
 }

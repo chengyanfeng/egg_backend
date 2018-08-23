@@ -1,6 +1,7 @@
 package util
 
 import (
+	"Egg/util"
 	"crypto/md5"
 	"crypto/sha1"
 	"crypto/sha256"
@@ -147,7 +148,7 @@ func AddCache(token, openId string) bool {
 	cache := cache2go.Cache("Cache")
 
 	val := Cacha{openId, []byte{}}
-	cache.Add(token, 120*time.Minute, &val)
+	cache.Add(token, 120*time.Second, &val)
 
 	// 验证是否存在
 	res, err := cache.Value(token)
@@ -171,4 +172,9 @@ func GetCache(token string) string {
 		return ""
 	}
 
+}
+
+func GetCurDayTime() int {
+	the_time, _ := time.ParseInLocation("2006-01-02", time.Now().Format("2006-01-02"), time.Local)
+	return util.ToInt(the_time)
 }

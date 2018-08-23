@@ -1,10 +1,12 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
 )
+
 //以下皆是网上的例子,原始方法可以参考，此不属于项目内的文件
 func Middleware(c *gin.Context) {
 	fmt.Println("this is a middleware!")
@@ -38,5 +40,10 @@ func DeleteHandler(c *gin.Context) {
 	return
 }
 
+func Test(c *gin.Context) {
 
+	the_time, _ := time.ParseInLocation("2006-01-02", time.Now().Format("2006-01-02"), time.Local)
 
+	fmt.Print(the_time.Unix())
+
+}

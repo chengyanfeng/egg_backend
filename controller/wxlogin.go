@@ -45,11 +45,19 @@ func IndexHandler(c *gin.Context) {
 		//查看是否有电话号码
 		models.DB.Where(user).First(&user)
 		if len(user.Mobile) > 0 {
-			returnp["code"] = def.CODENoPhone
+
+			//已经绑定过号码了，登陆成功。进行操作
+			user.LoginTimes = user.LoginTimes + 1
+			user.LastLogIn = util.ToInt(time.Now().Unix())
+			//金币的奖励和登陆的日期
+			EvenDaPrize(&user)
+
+			returnp["code"] = def.CODE
 			c.JSON(http.StatusOK, returnp)
 			return
 		} else {
-			returnp["code"] = def.CODE
+			//没有绑定手机号，不算登陆
+			returnp["code"] = def.CODENoPhone
 			c.JSON(http.StatusOK, returnp)
 			return
 		}
@@ -60,7 +68,9 @@ func IndexHandler(c *gin.Context) {
 	user.CreateTime = util.ToInt(time.Now().Unix())
 	models.DB.Create(&user)
 	if !models.DB.NewRecord(user) {
-		fmt.Print("保存成功")
+
+		returnp["code"] = def.CODENoPhone
+		c.JSON(http.StatusOK, returnp)
 	} else {
 		returnp["code"] = def.CODEErrDB
 		c.JSON(http.StatusOK, returnp)
@@ -86,7 +96,6 @@ func BandPhoneNumber(c *gin.Context) {
 	user := models.User{}
 	returnp := util.P{}
 	PhoneNumber, exist := c.GetQuery("PhoneNumber")
-	Password, _ := c.GetQuery("PassWord")
 	token, _ := c.GetQuery("token")
 	openId := util.GetCache(token)
 	if !exist {
@@ -108,6 +117,8 @@ func BandPhoneNumber(c *gin.Context) {
 		user.WXNickName = wxuser.WXNickName
 		//保存
 		models.DB.Save(&user)
+		token := util.Hash("md5", user.Mobile+util.GetRandomString())
+		util.AddCache(token, util.ToString(user.ID))
 		returnp["token"] = token
 		returnp["code"] = def.CODEPhoneBandWX
 		c.JSON(http.StatusOK, returnp)
@@ -118,9 +129,33 @@ func BandPhoneNumber(c *gin.Context) {
 	if !models.DB.NewRecord(user) {
 		models.DB.First(&user)
 		user.Mobile = PhoneNumber
-		user.PwdHash = util.Hash(Password)
+
 		//更新手机号和秘密
 		models.DB.Save(&user)
+		//创建鸡舍
+		henHouse := models.HenHouse{}
+		henHouse.UserID = user.ID
+		henHouse.Level = 1
+		henHouse.Tools = "aaa"
+		henHouse.CleanState = 1
+		models.DB.Create(&henHouse)
+		//创建免费公鸡
+		chilck := models.Hen{}
+		chilck.Name = "小么鸡"
+		chilck.CreateTime = util.ToInt(time.Now().Unix())
+		chilck.State = 1
+		chilck.EggType = 1
+		chilck.LifeTime = 365
+		chilck.LifeTime = 3
+		chilck.LifeValue = 3
+		chilck.EggGenRate = 1
+		chilck.GoldEggRate = 1
+		chilck.UserID = user.ID
+		chilck.HenHouseID = henHouse.ID
+		models.DB.Create(&chilck)
+		//把token放到缓存里面
+		token := util.Hash("md5", user.Mobile+util.GetRandomString())
+		util.AddCache(token, util.ToString(user.ID))
 		returnp["code"] = def.CODEBandPhone
 		c.JSON(http.StatusOK, returnp)
 	}
@@ -129,12 +164,13 @@ func BandPhoneNumber(c *gin.Context) {
 
 //手机号码登陆
 func PhoneNumberLogin(c *gin.Context) {
+
 	returnp := util.P{}
 	User := models.User{}
-	phone, exist := c.GetQuery("phoneNumber")
-	dentifyingCode, _ := c.GetQuery("dentifyingCode")
+	phone := c.PostForm("phoneNumber")
+	dentifyingCode := c.PostForm("dentifyingCode")
 	Password, _ := c.GetQuery("PassWord")
-	if !exist {
+	if len(phone) == 0 {
 		returnp["code"] = def.CODEPhoneIsNull
 		c.JSON(http.StatusOK, returnp)
 		return
@@ -174,9 +210,15 @@ func PhoneNumberLogin(c *gin.Context) {
 			//如果已经注册，获取userID
 			if !models.DB.NewRecord(&User) {
 				models.DB.First(&User)
+				//登陆次数加上一
+				User.LoginTimes = User.LoginTimes + 1
+				//设置最后的登陆时间
+				User.LastLogIn = util.ToInt(time.Now().Unix())
+				//登陆奖励金币，和七天奖励金币
+				EvenDaPrize(&User)
+
 				//把token放到缓存里面
-				token := util.Hash(phone)
-				util.AddCache("token", token)
+				token := util.Hash("md5", phone+util.GetRandomString())
 				util.AddCache(token, util.ToString(User.ID))
 				returnp["code"] = def.CODE
 				returnp["token"] = token
@@ -188,9 +230,29 @@ func PhoneNumberLogin(c *gin.Context) {
 				User.CreateTime = util.ToInt(time.Now().Unix())
 				User.LoginTimes = 1
 				models.DB.Create(&User)
+				//创建鸡舍
+				henHouse := models.HenHouse{}
+				henHouse.UserID = User.ID
+				henHouse.Level = 1
+				henHouse.Tools = "aaa"
+				henHouse.CleanState = 1
+				models.DB.Create(&henHouse)
+				//创建免费公鸡
+				chilck := models.Hen{}
+				chilck.Name = "小么鸡"
+				chilck.CreateTime = util.ToInt(time.Now().Unix())
+				chilck.State = 1
+				chilck.EggType = 1
+				chilck.LifeTime = 365
+				chilck.LifeTime = 3
+				chilck.LifeValue = 3
+				chilck.EggGenRate = 1
+				chilck.GoldEggRate = 1
+				chilck.UserID = User.ID
+				chilck.HenHouseID = henHouse.ID
+				models.DB.Create(&chilck)
 				//把token放到缓存里面
-				token := util.Hash(phone)
-				util.AddCache("token", token)
+				token := util.Hash("md5", phone+util.GetRandomString())
 				util.AddCache(token, util.ToString(User.ID))
 				returnp["code"] = def.CODE
 				returnp["token"] = token
@@ -237,7 +299,6 @@ func SetPassWord(c *gin.Context) {
 }
 
 //发送手机验证码
-
 func SetNumberVcod(c *gin.Context) {
 	returnp := util.P{}
 	phone, exist := c.GetQuery("phoneNumber")

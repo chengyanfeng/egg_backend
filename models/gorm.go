@@ -15,6 +15,14 @@ func (User) TableName() string {
 
 	return "user"
 }
+func (HenHouse) TableName() string {
+
+	return "henhouse"
+}
+func (Hen) TableName() string {
+
+	return "hen"
+}
 
 //数据库初始化
 func init() {
@@ -32,12 +40,26 @@ func init() {
 	if err != nil {
 		panic(err.Error())
 	}
-	if DB.HasTable("users") {
+	if DB.HasTable("user") {
 		//自动添加模式
 		DB.AutoMigrate(&User{})
 		fmt.Println("数据表已经存在")
 	} else {
 		DB.CreateTable(&User{})
+	}
+	if DB.HasTable("henhouse") {
+		//自动添加模式
+		DB.AutoMigrate(&HenHouse{})
+		fmt.Println("数据表已经存在")
+	} else {
+		DB.CreateTable(&HenHouse{})
+	}
+	if DB.HasTable("hen") {
+		//自动添加模式
+		DB.AutoMigrate(&Hen{})
+		fmt.Println("数据表已经存在")
+	} else {
+		DB.CreateTable(&Hen{})
 	}
 
 }
