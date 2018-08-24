@@ -33,5 +33,6 @@ const (
 	CODEDENtifyCodeExp = 40007 //验证码过期
 	CODETOKENErr       = 40008 //token 错误
 	CODEGETERR         = 40009 //腾讯云验证码获取失败
+	CODEHenErr         = 40010 //喂食动作失败，可能是鸡不存在
 
 )

@@ -130,7 +130,7 @@ func BandPhoneNumber(c *gin.Context) {
 		models.DB.First(&user)
 		user.Mobile = PhoneNumber
 
-		//更新手机号和秘密
+		//更新手机号和密码
 		models.DB.Save(&user)
 		//创建鸡舍
 		henHouse := models.HenHouse{}

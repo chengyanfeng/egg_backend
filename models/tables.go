@@ -64,60 +64,82 @@ type Shop struct {
 //商品订单表
 type ShopOrder struct {
 	ID         int `gorm:"primary_key"`
-	UserID     int `gorm:"UserID"`
-	CreateTime int `gorm:"CreateTime"` //订单创建时间 UTC
-	ShopID     int `gorm:"ShopID"`     //商品ID
-	Amount     int `gorm:"Amount"`     //购买数量
-	Coins      int `gorm:"Coins"`      //支付总额（金币分）
-	State      int `gorm:"State"`      //0: 待支付，1: 支付成功
+	UserID     int `gorm:"column:UserID"`
+	CreateTime int `gorm:"column:CreateTime"` //订单创建时间 UTC
+	ShopID     int `gorm:"column:ShopID"`     //商品ID
+	Amount     int `gorm:"column:Amount"`     //购买数量
+	Coins      int `gorm:"column:Coins"`      //支付总额（金币分）
+	State      int `gorm:"column:State"`      //0: 待支付，1: 支付成功
 }
 
 //系统回收鸡蛋订单表
 type EggWithdrawOrder struct {
 	ID         int `gorm:"primary_key"`
-	UserID     int `gorm:"UserID"`
-	CreateTime int `gorm:"CreateTime"` //创建时间戳
-	Amount     int `gorm:"Amount"`     //数量
-	PriceCent  int `gorm:"PriceCent"`  //单价（金币分）
+	UserID     int `gorm:"column:UserID"`
+	CreateTime int `gorm:"column:CreateTime"` //创建时间戳
+	Amount     int `gorm:"column:Amount"`     //数量
+	PriceCent  int `gorm:"column:PriceCent"`  //单价（金币分）
 }
 
 //用户提现鸡蛋订单表
 type EggTakenOrder struct {
 	ID          int    `gorm:"primary_key"`
-	UserID      int    `gorm:"UserID"`      //用户ID
-	CreateTime  int    `gorm:"CreateTime"`  //创建时间戳
-	Amount      int    `gorm:"Amount"`      //提现鸡蛋数量
-	Address     string `gorm:"Address"`     //用户收货信息，从用户表中获得
-	DeliverInfo string `gorm:"DeliverInfo"` //快递信息
-	State       int    `gorm:"State"`       //订单状态
+	UserID      int    `gorm:"column:UserID"`      //用户ID
+	CreateTime  int    `gorm:"column:CreateTime"`  //创建时间戳
+	Amount      int    `gorm:"column:Amount"`      //提现鸡蛋数量
+	Address     string `gorm:"column:Address"`     //用户收货信息，从用户表中获得
+	DeliverInfo string `gorm:"column:DeliverInfo"` //快递信息
+	State       int    `gorm:"column:State"`       //订单状态
 }
 
 //鸡表
 type Hen struct {
-	ID          int    `gorm:"primary_key"` //id
-	RealTag     string `gorm:"RealTag"`     //实体鸡脚环唯一标识
-	Name        string `gorm:"Name"`        //鸡昵称
-	CreateTime  int    `gorm:"CreateTime"`  //创建时间，鸡生日（UTC， timestamp)
-	State       int    `gorm:"State"`       //当前状态：（1:饥饿，2:吃饱，3:无人看管，4:出游）
-	HenType     int    `gorm:"HenType"`     //鸡类型：（1:免费鸡，2:乖乖鸡，3:金鸡，4:鸡雏，5:公鸡）
-	EggType     int    `gorm:"EggType"`     //产蛋类型：（0:无法产蛋，1:彩蛋，2:鸡蛋），都有概率产出金蛋（3）
-	LifeTime    int    `gorm:"LifeTime"`    //鸡龄: 蛋鸡365天，鸡雏喂养30天转为乖乖鸡，可通过道具加速
-	Lifes       int    `gorm:"Lifes"`       //生命数，3条
-	LifeValue   int    `gorm:"LifeValue"`   //生命值，一天不喂养（喂养以天为单位，0-24点任意时刻），进入生命值倒计时（72小时），State转为1，倒计时内喂养，解除倒计时，倒计时到减除1条Life直至完全死亡
-	EggGenRate  int    `gorm:"EggGenRate"`  //产蛋率（每日产蛋数量，default: 0.667，即3天2枚，可转化为36小时1枚)，针对彩蛋，鸡蛋，金蛋
-	GoldEggRate int    `gorm:"GoldEggRate"` //产蛋为金蛋概率，每产出一枚蛋时，依据此概率进行金蛋转换(千分之）
-	Skins       string `gorm:"Skins"`       //当前使用的道具列表
-	HenHouseID  int    `gorm:"HenHouseID"`  //所属鸡舍 （关联鸡舍表，多对1）
-	UserID      int    `gorm:"UserID"`      //所属用户 （关联用户表，多对1）
+	ID          int     `gorm:"primary_key"`        //id
+	RealTag     string  `gorm:"column:RealTag"`     //实体鸡脚环唯一标识
+	Name        string  `gorm:"column:Name"`        //鸡昵称
+	CreateTime  int     `gorm:"column:CreateTime"`  //创建时间，鸡生日（UTC， timestamp)
+	State       int     `gorm:"column:State"`       //当前状态：（1:饥饿，2:吃饱，3:无人看管，4:出游）
+	HenType     int     `gorm:"column:HenType"`     //鸡类型：（1:免费鸡，2:乖乖鸡，3:金鸡，4:鸡雏，5:公鸡）
+	EggType     int     `gorm:"column:EggType"`     //产蛋类型：（0:无法产蛋，1:彩蛋，2:鸡蛋），都有概率产出金蛋（3）
+	LifeTime    int     `gorm:"column:LifeTime"`    //鸡龄: 蛋鸡365天，鸡雏喂养30天转为乖乖鸡，可通过道具加速
+	Lifes       int     `gorm:"column:Lifes"`       //生命数，3条
+	LifeValue   int     `gorm:"column:LifeValue"`   //生命值，一天不喂养（喂养以天为单位，0-24点任意时刻），进入生命值倒计时（72小时），State转为1，倒计时内喂养，解除倒计时，倒计时到减除1条Life直至完全死亡
+	EggGenRate  float64 `gorm:"column:EggGenRate"`  //产蛋率（每日产蛋数量，default: 0.667，即3天2枚，可转化为36小时1枚)，针对彩蛋，鸡蛋，金蛋
+	GoldEggRate int     `gorm:"column:GoldEggRate"` //产蛋为金蛋概率，每产出一枚蛋时，依据此概率进行金蛋转换(千分之）
+	Skins       string  `gorm:"column:Skins"`       //当前使用的道具列表
+	HenHouseID  int     `gorm:"column:HenHouseID"`  //所属鸡舍 （关联鸡舍表，多对1）
+	UserID      int     `gorm:"column:UserID"`      //所属用户 （关联用户表，多对1）
+	Deposit     int     `gorm:"column:Deposit"`     //0，未托管，1托管。
 }
 
 //鸡舍表
 type HenHouse struct {
-	ID         int    `gorm:"primary_key"` //id
-	Level      int    `gorm:"Level"`       //等级
-	Tools      string `gorm:"Tools"`       //道具列表，用户购买的鸡舍道具列表
-	CleanState int    `gorm:"CleanState"`  //	清洁程度
-	UserID     int    `gorm:"UserID"`      //所属用户 (关联用户表，1对1）
+	ID         int    `gorm:"primary_key"`       //id
+	Level      int    `gorm:"column:Level"`      //等级
+	Tools      string `gorm:"column:Tools"`      //道具列表，用户购买的鸡舍道具列表
+	CleanState int    `gorm:"column:CleanState"` //	清洁程度
+	UserID     int    `gorm:"column:UserID"`     //所属用户 (关联用户表，1对1）
+}
+
+//喂养表
+type Feed struct {
+	ID            int `gorm:"primary_key"`          //ID
+	Type          int `gorm:"column:Type"`          //喂养的食料的种类（1:乖乖鸡，2:普通饲料，3:能量饲料，4:快速饲料..., 类型通过和客户端共享JSON配置文件）
+	CreateTime    int `gorm:"column:CreateTime"`    //喂养的时间
+	UserId        int `gorm:"column:UserId"`        //用户ID
+	HenId         int `gorm:"column:HenId"`         //喂养的鸡的id
+	CreateTimeDay int `gorm:"column:CreateTimeDay"` //喂养的当天的零点时间，为了方便。
+	SevenTime     int `gorm:"column:SevenTime"`     //七天连续的天数
+}
+type Egg struct {
+	ID            int `gorm:"primary_key"`          //ID
+	Type          int `gorm:"column:Type"`          //鸡蛋的类型
+	CreateTime    int `gorm:"column:CreateTime"`    //创建时间
+	UserId        int `gorm:"column:UserId"`        //用户ID
+	HenId         int `gorm:"column:HenId"`         //鸡的ID
+	CreateTimeDay int `gorm:"column:CreateTimeDay"` //下蛋当天的零点时间，为了方便。
+	Source        int `gorm:"column:Source"`        //鸡蛋的来源 1.小鸡下的，2.兑换的。
+	Sell          int `gorm:"column:Sell"`          //是否售卖，或者兑换金币，或其他蛋种
 }
 
 //市场表

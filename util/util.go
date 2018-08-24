@@ -178,3 +178,8 @@ func GetCurDayTime() int {
 	the_time, _ := time.ParseInLocation("2006-01-02", time.Now().Format("2006-01-02"), time.Local)
 	return util.ToInt(the_time)
 }
+
+func GetYesDayTime() int {
+	the_time, _ := time.ParseInLocation("2006-01-02", time.Now().Format("2006-01-02"), time.Local)
+	return util.ToInt(the_time) - 86400
+}
