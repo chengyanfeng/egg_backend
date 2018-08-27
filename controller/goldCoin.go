@@ -161,7 +161,6 @@ func Deposit(c *gin.Context) {
 }
 
 //鸡状态的获取
-
 func GetHenNature(c *gin.Context) {
 	returnp := util.P{}
 	token := c.GetString("token")
