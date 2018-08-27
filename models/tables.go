@@ -48,8 +48,9 @@ type UserProperty struct {
 	HenHouseID        float64 `gorm:"column:HenHouseID"`        //鸡舍ID（关联鸡舍表，1对1）
 	Hens              int     `gorm:"column:Hens"`              //所拥有鸡ID列表,此项属性低频变化，用户购买，或者孵化，或者鸡死亡触发变化，平常避免联合查询
 	NormalFoods       int     `gorm:"column:NormalFoods"`       //普通饲料数量
-	FastFoods         int     `gorm:"column:FastFoods"`         //快速成长饲料数量
-	HasDag            int     `gorm:"column:HasDag"`            //是否有狗 (0, 1)
+	EnergyFoods       int     `gorm:"column:EnergyFoods"`
+	FastFoods         int     `gorm:"column:FastFoods"` //快速成长饲料数量
+	HasDag            int     `gorm:"column:HasDag"`    //是否有狗 (0, 1)
 }
 
 //商品表
@@ -124,13 +125,15 @@ type HenHouse struct {
 //喂养表
 type Feed struct {
 	ID            int `gorm:"primary_key"`          //ID
-	Type          int `gorm:"column:Type"`          //喂养的食料的种类（1:乖乖鸡，2:普通饲料，3:能量饲料，4:快速饲料..., 类型通过和客户端共享JSON配置文件）
+	Type          int `gorm:"column:Type"`          //喂养的食料的种类（1:普通饲料，2.能量饲料，3:快速饲料...,
 	CreateTime    int `gorm:"column:CreateTime"`    //喂养的时间
 	UserId        int `gorm:"column:UserId"`        //用户ID
 	HenId         int `gorm:"column:HenId"`         //喂养的鸡的id
 	CreateTimeDay int `gorm:"column:CreateTimeDay"` //喂养的当天的零点时间，为了方便。
 	SevenTime     int `gorm:"column:SevenTime"`     //七天连续的天数
 }
+
+//鸡蛋表
 type Egg struct {
 	ID            int `gorm:"primary_key"`          //ID
 	Type          int `gorm:"column:Type"`          //鸡蛋的类型
@@ -138,7 +141,7 @@ type Egg struct {
 	UserId        int `gorm:"column:UserId"`        //用户ID
 	HenId         int `gorm:"column:HenId"`         //鸡的ID
 	CreateTimeDay int `gorm:"column:CreateTimeDay"` //下蛋当天的零点时间，为了方便。
-	Source        int `gorm:"column:Source"`        //鸡蛋的来源 1.小鸡下的，2.兑换的。
+	Source        int `gorm:"column:Source"`        //鸡蛋的来源 1.小鸡下的，2.兑换的,3.系统赠送
 	Sell          int `gorm:"column:Sell"`          //是否售卖，或者兑换金币，或其他蛋种
 }
 

@@ -36,6 +36,11 @@ func init() {
 
 	//发送手机号码
 	Defaultrouter.GET("/SetNumberVcod", controller.SetNumberVcod)
+	//用户托管
+	Defaultrouter.GET("/Deposit", controller.Deposit)
+
+	//获取公鸡的各种属性
+	Defaultrouter.GET("/GetHenNature", controller.GetHenNature)
 
 	//测试
 	Defaultrouter.GET("/Test", controller.Test)

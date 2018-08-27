@@ -22,6 +22,13 @@ type P map[string]interface{}
 func Md5(s ...interface{}) (r string) {
 	return Hash("md5", s...)
 }
+func ToFloat(s interface{}, default_v ...float64) float64 {
+	f64, e := strconv.ParseFloat(ToString(s), 64)
+	if e != nil && len(default_v) > 0 {
+		return default_v[0]
+	}
+	return f64
+}
 func Hash(algorithm string, s ...interface{}) (r string) {
 	var h hash.Hash
 	switch algorithm {
