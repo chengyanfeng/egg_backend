@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"egg_backend/def"
 	"egg_backend/models"
 	"egg_backend/util"
 )
@@ -10,6 +9,7 @@ import (
 func HenLiveCheck() {
 	//获取所有的小鸡列表
 	HenList := []models.Hen{}
+	models.DB.Where("life_time > ?", 0).Find(&HenList)
 	for _, v := range HenList {
 		//所有的鸡全部更为饥饿状态
 		v.State = 1
@@ -29,18 +29,22 @@ func HenLiveCheck() {
 			userProperty := models.UserProperty{}
 			userProperty.UserID = v.UserID
 			models.DB.First(&userProperty)
-			//已经喂养，生产鸡蛋。
+			//查询喂养记录
 			models.DB.First(&feed)
 			//判断鸡的类型
 			switch v.HenType {
 			case 1:
-				def.FreeHee(&feed, &userProperty, &v, &HenHouse)
+				models.FreeHee(&feed, &userProperty, &v, &HenHouse)
 				break
 			case 2:
-				def.DarlingHee(&feed, &userProperty, &v, &HenHouse)
+				models.DarlingHee(&feed, &userProperty, &v, &HenHouse)
 				break
 			case 3:
-				def.DarlingHee(&feed, &userProperty, &v, &HenHouse)
+				models.GoldHee(&feed, &userProperty, &v, &HenHouse)
+				break
+
+			case 4:
+				models.LitileHee(&feed, &userProperty, &v, &HenHouse)
 				break
 			}
 
@@ -50,17 +54,31 @@ func HenLiveCheck() {
 			//公鸡生命值减去1
 			models.DB.Save(&v)
 		}
-		//如果是托管的公鸡
-		if v.Deposit == 1 {
-			//主动喂食料
+		//查看今天的是否喂养
+		feedif := models.Feed{}
+		feed.HenId = v.ID
+		feed.UserId = v.UserID
+		if !models.DB.NewRecord(feedif) {
+			//更改鸡的状态
+			models.ChangeChilckType(v.ID, 2)
+		}
 
-			UserProperty := models.UserProperty{}
-			UserProperty.UserID = v.UserID
-			models.DB.First(&UserProperty)
-			//检查是否有还有食料
-			flag := def.CheckFeed(&UserProperty)
-			if flag > 0 {
-				def.DepositFeed(flag, v)
+		//如果是托管的鸡
+		if v.Deposit == 1 {
+			//查看当天有没有喂养
+			goldFeed := models.Feed{}
+			count := 0
+			models.DB.Model(&goldFeed).Where("UserId=? AND HenId=? AND CreateTimeDay=?", v.UserID, v.ID, util.ToInt(util.GetCurDayTime())).Count(&count)
+			if count == 0 {
+				//主动喂食料
+				UserProperty := models.UserProperty{}
+				UserProperty.UserID = v.UserID
+				models.DB.First(&UserProperty)
+				//检查是否有还有食料
+				flag := models.CheckFeed(&UserProperty)
+				if flag > 0 {
+					models.DepositFeed(flag, &v)
+				}
 			}
 		}
 

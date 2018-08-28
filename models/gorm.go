@@ -23,6 +23,10 @@ func (Hen) TableName() string {
 
 	return "hen"
 }
+func (Egg) TableName() string {
+
+	return "egg"
+}
 
 //数据库初始化
 func init() {
@@ -61,5 +65,11 @@ func init() {
 	} else {
 		DB.CreateTable(&Hen{})
 	}
-
+	if DB.HasTable("egg") {
+		//自动添加模式
+		DB.AutoMigrate(&Egg{})
+		fmt.Println("数据表已经存在")
+	} else {
+		DB.CreateTable(&Egg{})
+	}
 }

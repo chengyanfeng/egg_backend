@@ -18,8 +18,8 @@ func init() {
 	Defaultrouter.DELETE("/simple/server/delete", controller.DeleteHandler)
 
 	/***********************************----------------路由拦截器----------------******************************/
-	//添加中间件
-	Defaultrouter.Use(controller.LoginFilter)
+	/*//添加中间件
+	Defaultrouter.Use(controller.LoginFilter)*/
 	/***********************************---------------以下为正式路由-----------------******************************/
 	//支付宝支付接口
 	Defaultrouter.GET("/zhifubao/pay", controller.ZhiFuBaoPay)
@@ -41,6 +41,9 @@ func init() {
 
 	//获取公鸡的各种属性
 	Defaultrouter.GET("/GetHenNature", controller.GetHenNature)
+
+	//获取公鸡的产蛋量
+	Defaultrouter.GET("/GetEggNumber", controller.GetEggNumber)
 
 	//测试
 	Defaultrouter.GET("/Test", controller.Test)

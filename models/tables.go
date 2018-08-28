@@ -131,6 +131,15 @@ type Feed struct {
 	HenId         int `gorm:"column:HenId"`         //喂养的鸡的id
 	CreateTimeDay int `gorm:"column:CreateTimeDay"` //喂养的当天的零点时间，为了方便。
 	SevenTime     int `gorm:"column:SevenTime"`     //七天连续的天数
+	ContinueDay   int `gorm:"column:ContinueDay"`   //持续天数
+}
+
+//鸡的各种营养食料
+type FoodStuff struct {
+	ID          int `gorm:"primary_key"`        //ID
+	Type        int `gorm:"column:Type"`        //喂养的食料的种类（1:普通饲料，2.能量饲料，3:快速饲料...,
+	Price       int `gorm:"column:Price"`       //价格
+	ContinueDay int `gorm:"column:ContinueDay"` //持续天数
 }
 
 //鸡蛋表

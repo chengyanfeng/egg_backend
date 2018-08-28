@@ -1,7 +1,6 @@
 package util
 
 import (
-	"Egg/util"
 	"crypto/md5"
 	"crypto/sha1"
 	"crypto/sha256"
@@ -183,10 +182,10 @@ func GetCache(token string) string {
 
 func GetCurDayTime() int {
 	the_time, _ := time.ParseInLocation("2006-01-02", time.Now().Format("2006-01-02"), time.Local)
-	return util.ToInt(the_time)
+	return ToInt(the_time)
 }
 
 func GetYesDayTime() int {
 	the_time, _ := time.ParseInLocation("2006-01-02", time.Now().Format("2006-01-02"), time.Local)
-	return util.ToInt(the_time) - 86400
+	return ToInt(the_time) - 86400
 }

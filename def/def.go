@@ -35,5 +35,6 @@ const (
 	CODEGETERR         = 40009 //腾讯云验证码获取失败
 	CODEHenErr         = 40010 //喂食动作失败，可能是鸡不存在
 	CODEDepositErr     = 40011 //托管动作失败，可能是鸡不存在
+	CODENumberErr      = 40012 // 蛋的数量错误
 
 )
